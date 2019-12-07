@@ -37,7 +37,7 @@ if __name__ == "__main__":
     criterian = t.nn.CrossEntropyLoss()
     model = Resnet.ResNet18().to(DEVICE)
     # Test the train_loader
-    model = load_model(model, args.epoch)
+    model = load_model(model, 120)
     model = model.eval()
 
     with t.no_grad():
