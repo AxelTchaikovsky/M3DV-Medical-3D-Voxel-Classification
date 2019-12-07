@@ -108,3 +108,6 @@ data/
 result/
 saved_model/
 nohup.out
+
+#vscode file
+.vscode/
