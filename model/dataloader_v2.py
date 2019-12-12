@@ -15,7 +15,7 @@ class data_set(t.utils.data.Dataset):
     def __init__(self, idx):
         self.idx = idx
         self.config = json.load(open('config.json'))
-        self.data_root = self.config["Taining_Dir"]
+        self.data_root = self.config["Training_Dir"]
         self.names = np.array(os.listdir(self.data_root))
         self.sort()
         self.names = self.names[idx]
@@ -64,7 +64,7 @@ class MyDataSet():
     def __init__(self):
         super().__init__()
         self.config = json.load(open('config.json'))
-        self.data_root = self.config["Taining_Dir"]
+        self.data_root = self.config["Training_Dir"]
         self.data_names = np.array(os.listdir(self.data_root))
         self.DEVICE = t.device(self.config["DEVICE"])
         self.gray = self.config["gray"]
@@ -78,7 +78,7 @@ class MyDataSet():
         self.data_names = np.array(sorted_key_list)
         # print(self.data_names)
 
-    def test_trian_split(self, p=0.8):
+    def test_train_split(self, p=0.75):
         '''
         p is the portation of the training set
         '''

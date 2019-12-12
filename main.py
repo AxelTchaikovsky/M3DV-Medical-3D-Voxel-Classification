@@ -5,8 +5,9 @@ import torch as t
 import torch.utils.data.dataloader as DataLoader
 import multiprocessing
 
-from model import dataloader
+from model import dataloader_v2 as dataloader
 from model import Resnet
+from model import VoxNet
 from model.func import save_model, eval_model_new_thread, eval_model
 
 if __name__ == "__main__":
@@ -26,7 +27,8 @@ if __name__ == "__main__":
     test_loader = DataLoader.DataLoader(
         test_data, batch_size=1, shuffle=False, num_workers=config["num_workers"])
 
-    model = Resnet.ResNet18().to(DEVICE)
+    #model = Resnet.ResNet18().to(DEVICE)
+    model = VoxNet.MVVoxNet().to(DEVICE)
 
     # Multi GPU setting
     # model = t.nn.DataParallel(model,device_ids=[0,1])
