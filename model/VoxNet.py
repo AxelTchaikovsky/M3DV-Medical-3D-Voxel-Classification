@@ -35,11 +35,11 @@ class MVVoxNet(torch.nn.Module):
             ('conv1', torch.nn.Conv3d(in_channels=1,
                                       out_channels=32, kernel_size=3, stride=2)),#kernel 3
             ('lkrelu1', torch.nn.LeakyReLU()),
-            ('drop1', torch.nn.Dropout(p=0.2)),
+            ('drop1', torch.nn.Dropout(p=0.1)),
             ('conv2', torch.nn.Conv3d(in_channels=32, out_channels=32, kernel_size=3)),
             ('lkrelu2', torch.nn.LeakyReLU()),
             ('pool2', torch.nn.MaxPool3d(2)),
-            ('drop2', torch.nn.Dropout(p=0.3))#0.3
+            ('drop2', torch.nn.Dropout(p=0.2))#0.3
         ]))
 
         # Trick to accept different input shapes
