@@ -78,7 +78,7 @@ class MyDataSet():
         self.data_names = np.array(sorted_key_list)
         # print(self.data_names)
 
-    def test_train_split(self, p=0.75):
+    def test_train_split(self, p=0.8):
         '''
         p is the portation of the training set
         '''

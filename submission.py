@@ -5,15 +5,11 @@ import torch as t
 import torch.utils.data.dataloader as DataLoader
 import multiprocessing
 
-from model.dataloader_v3 import *
-from model.DnCNN import DnCNN
-from model import Resnet
-from model import Conv3D_Net
-from model.VoxNet_66 import VoxNet
-from model.baseline import FC_Net
+from model.dataloader_v2 import *
+from model import VoxNet
 from model.func import save_model, eval_model_new_thread, eval_model, load_model
 import argparse
-from tensorboardX import SummaryWriter
+#from tensorboardX import SummaryWriter
 from sklearn.model_selection import KFold
 import pandas as pd
 if __name__ == "__main__":
@@ -38,14 +34,14 @@ if __name__ == "__main__":
 
     criterian = t.nn.NLLLoss()
 
-    model1 = VoxNet(2).to(DEVICE)
-    model2 = VoxNet(2).to(DEVICE)
-    model3 = VoxNet(2).to(DEVICE)
-    model4 = VoxNet(2).to(DEVICE)
-    model5 = VoxNet(2).to(DEVICE)
+    model1 = VoxNet.MVVoxNet(2).to(DEVICE)
+    # model2 = VoxNet(2).to(DEVICE)
+    # model3 = VoxNet(2).to(DEVICE)
+    # model4 = VoxNet(2).to(DEVICE)
+    # model5 = VoxNet(2).to(DEVICE)
     # Test the train_loader
     model1.load_state_dict(
-        t.load("saved_model/VoxNet_final/99.pkl"))
+        t.load("saved_model/31.pkl"))
     model1.eval()
     # model1.load_state_dict(
     #     t.load("/home/wangmingke/Desktop/HomeWork/ML_project/saved_model/VoxNet_V2_final/72.pkl"))

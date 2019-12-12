@@ -5,7 +5,7 @@ from collections import OrderedDict
 
 class MVVoxNet(torch.nn.Module):
 
-    def __init__(self, num_classes, input_shape=(32, 32, 32)):
+    def __init__(self, num_classes, input_shape=(100, 100, 100)):
                  #weights_path=None,
                  #load_body_weights=True,
                  #load_head_weights=True):
@@ -33,7 +33,7 @@ class MVVoxNet(torch.nn.Module):
         super(MVVoxNet, self).__init__()
         self.body = torch.nn.Sequential(OrderedDict([
             ('conv1', torch.nn.Conv3d(in_channels=1,
-                                      out_channels=32, kernel_size=5, stride=2)),
+                                      out_channels=32, kernel_size=3, stride=2)),
             ('lkrelu1', torch.nn.LeakyReLU()),
             ('drop1', torch.nn.Dropout(p=0.2)),
             ('conv2', torch.nn.Conv3d(in_channels=32, out_channels=32, kernel_size=3)),
@@ -63,18 +63,24 @@ class MVVoxNet(torch.nn.Module):
         #    elif load_head_weights:
         #        self.head.load_state_dict(weights["head"])
 
+    # def forward(self, x):
+    #     # shape x: BxVx1xDxDxD
+    #     view_pool = []
+    #     for v_idx in range(x.size(1)):
+    #         v = x[:, v_idx]
+    #         v = self.body(v)
+    #         v = v.view(v.size(0), -1)
+    #         view_pool.append(v)
+        
+    #     pooled_view = view_pool[0]
+    #     for i in range(1, len(view_pool)):
+    #         pooled_view = torch.max(pooled_view, view_pool[i])
+        
+    #     pooled_view = self.head(pooled_view)
+    #     return pooled_view 
+
     def forward(self, x):
-        # shape x: BxVx1xDxDxD
-        view_pool = []
-        for v_idx in range(x.size(1)):
-            v = x[:, v_idx]
-            v = self.body(v)
-            v = v.view(v.size(0), -1)
-            view_pool.append(v)
-        
-        pooled_view = view_pool[0]
-        for i in range(1, len(view_pool)):
-            pooled_view = torch.max(pooled_view, view_pool[i])
-        
-        pooled_view = self.head(pooled_view)
-        return pooled_view 
+        x = self.body(x)
+        x = x.view(x.size(0), -1)
+        x = self.head(x)
+        return x
