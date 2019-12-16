@@ -7,7 +7,7 @@ import multiprocessing
 
 from model import dataloader_v2 as dataloader
 from model import Resnet
-from model import VoxNet
+from model import Voxnet_2 as VoxNet
 from model.func import save_model, eval_model_new_thread, eval_model
 
 if __name__ == "__main__":
