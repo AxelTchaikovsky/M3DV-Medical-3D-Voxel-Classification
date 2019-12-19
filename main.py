@@ -7,14 +7,13 @@ import multiprocessing
 
 from model import dataloader_v2 as dataloader
 from model import Resnet
-from model import Voxnet_2 as VoxNet
+from model import VoxNet
 from model.func import save_model, eval_model_new_thread, eval_model
 
 if __name__ == "__main__":
     time_start = time.time()
 
     config = json.load(open("config.json"))
-    # os.environ["CUDA_VISIBLE_DEVICES"] = config["GPU"]
     DEVICE = t.device(config["DEVICE"])
     LR = config['lr']
     EPOCH = config['epoch']
@@ -23,31 +22,30 @@ if __name__ == "__main__":
     train_data, test_data = DataSet.test_train_split()
 
     train_loader = DataLoader.DataLoader(
-        train_data, batch_size=config["batch_size"], shuffle=True, num_workers=config["num_workers"])
+        train_data, batch_size=config["batch_size"], shuffle=True, 
+        num_workers=config["num_workers"])
     test_loader = DataLoader.DataLoader(
-        test_data, batch_size=1, shuffle=False, num_workers=config["num_workers"])
+        test_data, batch_size=1, shuffle=False, 
+        num_workers=config["num_workers"])
 
     #model = Resnet.ResNet18().to(DEVICE)
     model = VoxNet.MVVoxNet(2).to(DEVICE)
 
-    # Multi GPU setting
-    # model = t.nn.DataParallel(model,device_ids=[0,1])
+    #optemizer to use adam, SGD
+    optimizer = t.optim.SGD(model.parameters(),lr=LR)
 
-    optimizer = t.optim.Adam(model.parameters())
-
+    #criterian to use CrossEntropy
     criterian = t.nn.CrossEntropyLoss().to(DEVICE)
 
-    # Test the train_loader
-    
-    
+    #STARTING TRAIN AND TEST
     for epoch in range(EPOCH):
+        ##################################################
+        #PYTORCH start training mode
+        ##################################################
         model = model.train()
-        multiprocess_idx = 2
         train_loss = 0
         correct = 0
         for batch_idx, [data, label] in enumerate(train_loader):
-            #data = data.unsqueeze(1)
-            #print(data.shape)
             data, label = data.to(DEVICE), label.to(DEVICE)
             out = model(data).squeeze()
             loss = criterian(out, label)
@@ -56,7 +54,7 @@ if __name__ == "__main__":
             optimizer.step()
 
             train_loss += loss
-            pred = out.max(1, keepdim=True)[1]  # 找到概率最大的下标
+            pred = out.max(1, keepdim=True)[1]
             correct += pred.eq(label.view_as(pred)).sum().item()
         train_loss /= len(train_loader.dataset)
         print('\nEpoch: {}, Train set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(epoch,
@@ -64,7 +62,9 @@ if __name__ == "__main__":
                                                                                                      train_loader.dataset),
                                                                                                  100. * correct / len(train_loader.dataset)))
 
-
+        ##################################################
+        #PYTORCH start evaluation mode
+        ##################################################
         model = model.eval()
         test_loss = 0                                                                        
         correct = 0
@@ -74,17 +74,13 @@ if __name__ == "__main__":
                 out = model(data)
                 loss = criterian(out, label)
                 test_loss += loss
-                pred = out.max(1, keepdim=True)[1]  # 找到概率最大的下标
+                pred = out.max(1, keepdim=True)[1]
                 correct += pred.eq(label.view_as(pred)).sum().item()
         test_loss /= len(test_loader.dataset)
         print('Epoch: {}, Test set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(epoch,
                                                                                                  test_loss, correct, len(
                                                                                                      test_loader.dataset),
                                                                                                  100. * correct / len(test_loader.dataset)))
-
-   
-
-
 
         save_model(model, epoch)
         eval_model_new_thread(epoch, 1)

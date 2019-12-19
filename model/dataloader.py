@@ -65,31 +65,31 @@ class MyDataSet():
         self.test_set = data_set(self.test_idx)
         return self.train_set, self.test_set
 
-class In_the_wild_set(t.utils.data.Dataset):
-    def __init__(self):
-        super().__init__()
-        self.config = json.load(open('config.json'))
-        self.test_root = self.config["Test_Dir"]
-        self.test_names = os.listdir(self.test_root)
-        self.DEVICE = t.device(self.config["DEVICE"])
-        self.gray = self.config["gray"]
-        self.init_transform()
+# class In_the_wild_set(t.utils.data.Dataset):
+#     def __init__(self):
+#         super().__init__()
+#         self.config = json.load(open('config.json'))
+#         self.test_root = self.config["Test_Dir"]
+#         self.test_names = os.listdir(self.test_root)
+#         self.DEVICE = t.device(self.config["DEVICE"])
+#         self.gray = self.config["gray"]
+#         self.init_transform()
 
-    def init_transform(self):
-        """ preprocessing the image and label """
-        self.transform = transforms.Compose([
-            transforms.ToTensor(),
-        ])
+#     def init_transform(self):
+#         """ preprocessing the image and label """
+#         self.transform = transforms.Compose([
+#             transforms.ToTensor(),
+#         ])
 
-    def __getitem__(self, index):
-        data = np.load(os.path.join(self.test_root, self.test_names[index]))
-        voxel = self.transform(data['voxel'].astype(np.float32))
-        seg = data['seg'].astype(np.float32)
-        data = np.concatenate([voxel, seg])
-        return data
+#     def __getitem__(self, index):
+#         data = np.load(os.path.join(self.test_root, self.test_names[index]))
+#         voxel = self.transform(data['voxel'].astype(np.float32))
+#         seg = data['seg'].astype(np.float32)
+#         data = np.concatenate([voxel, seg])
+#         return data
 
-    def __len__(self):
-        return len(self.test_names)
+#     def __len__(self):
+#         return len(self.test_names)
 
 
 if __name__ == "__main__":
