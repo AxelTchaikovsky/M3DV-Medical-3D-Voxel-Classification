@@ -35,32 +35,11 @@ if __name__ == "__main__":
     criterian = t.nn.CrossEntropyLoss()
 
     model1 = VoxNet.MVVoxNet(2).to(DEVICE)
-    # model2 = VoxNet(2).to(DEVICE)
-    # model3 = VoxNet(2).to(DEVICE)
-    # model4 = VoxNet(2).to(DEVICE)
-    # model5 = VoxNet(2).to(DEVICE)
     # Test the train_loader
-    model1.load_state_dict(t.load("D:/Machine learning/20-50_0.68240_31/29.pkl"))
+    model1.load_state_dict(t.load("saved_model/34.pkl"))
               #t.load("saved_model/41.pkl"))
     model1.eval()
-    # model1.load_state_dict(
-    #     t.load("/home/wangmingke/Desktop/HomeWork/ML_project/saved_model/VoxNet_V2_final/72.pkl"))
-    # model1.eval()
-    # model2.load_state_dict(
-    #     t.load("saved_model/VoxNet_V2_no_DA_2_folds/56.pkl"))
-    # model2.eval()
 
-    # model3.load_state_dict(
-    #     t.load("saved_model/VoxNet_V2_no_DA_3_folds/38.pkl"))
-    # model3.eval()
-
-    # model4.load_state_dict(
-    #     t.load("saved_model/VoxNet_V2_no_DA_4_folds/55.pkl"))
-    # model4.eval()
-
-    # model5.load_state_dict(
-    #     t.load("saved_model/VoxNet_V2_no_DA_5_folds/22.pkl"))
-    # model5.eval()
     with t.no_grad():
         # Test the test_loader
         test_loss = 0
@@ -71,19 +50,8 @@ if __name__ == "__main__":
         for batch_idx, [data, name] in enumerate(test_loader):
             data = data.to(DEVICE)
             out1 = t.nn.functional.softmax(model1(data))
-            # out2 = t.nn.functional.softmax(model2(data))
-            # out3 = t.nn.functional.softmax(model3(data))
-            # out4 = t.nn.functional.softmax(model4(data))
-            # out5 = t.nn.functional.softmax(model5(data))
-            # out5 = model5(data)
-            out = out1 #+ out2 + out3 + out4 +out5
-            # out /= 5
+            out = out1
             out = out.squeeze()
-            # monitor the upper and lower boundary of output
-            # out_max = t.max(out)
-            # out_min = t.min(out)
-            # out = (out - out_min) / (out_max - out_min)
-            # out = t.exp(out).squeeze()
             Name.append(name[0])
             Score.append(out[1].item())
         test_dict = {'Id': Name, 'Predicted': Score}
@@ -92,4 +60,4 @@ if __name__ == "__main__":
         path = 'result'
         if not os.path.exists(path):
             os.makedirs(path)
-        test_dict_df.to_csv('result/Submission_29_ck.csv', index=False)
+        test_dict_df.to_csv('result/Submission_34_19.csv', index=False)

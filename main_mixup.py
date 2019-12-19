@@ -9,6 +9,8 @@ from model import dataloader_v2 as dataloader
 from model import Resnet
 from model import VoxNet_try as VoxNet
 from model.func import save_model, eval_model_new_thread, eval_model
+from model.utils import mixup_data, mixup_criterion
+from torch.autograd import Variable
 
 if __name__ == "__main__":
     time_start = time.time()
@@ -18,6 +20,9 @@ if __name__ == "__main__":
     LR = config['lr']
     EPOCH = config['epoch']
 
+
+    #preparing data
+    print('==> Preparing data..')
     DataSet = dataloader.MyDataSet()
     train_data, test_data = DataSet.test_train_split()
 
@@ -48,15 +53,23 @@ if __name__ == "__main__":
         correct = 0
         for batch_idx, [data, label] in enumerate(train_loader):
             data, label = data.to(DEVICE), label.to(DEVICE)
-            out = model(data).squeeze()
-            loss = criterion(out, label)
+            #mix it up
+            data, label_a, label_b, lam = mixup_data(data, label)
             optimizer.zero_grad()
+            data, label_a, label_b = Variable(data), Variable(label_a), Variable(label_b)
+
+            out = model(data).squeeze()
+
+            #mix criterion
+            loss_func = mixup_criterion(label_a, label_b, lam)
+            loss = loss_func(criterion, out)
+            #optimizer.zero_grad()
             loss.backward()
             optimizer.step()
 
             train_loss += loss
             pred = out.max(1, keepdim=True)[1]
-            correct += pred.eq(label.view_as(pred)).sum().item()
+            correct += lam * pred.eq(label_a.view_as(pred)).sum().item() + (1-lam) * pred.eq(label_a.view_as(pred)).sum().item()
         train_loss /= len(train_loader.dataset)
         print('\nEpoch: {}, Train set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(epoch,
                                                                                                  train_loss, correct, len(
@@ -76,7 +89,7 @@ if __name__ == "__main__":
                 loss = criterion(out, label)
                 test_loss += loss
                 pred = out.max(1, keepdim=True)[1]
-                correct += pred.eq(label.view_as(pred)).sum().item()
+                correct += pred.eq(label.view_as(pred)).sum().item() 
         test_loss /= len(test_loader.dataset)
         print('Epoch: {}, Test set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(epoch,
                                                                                                  test_loss, correct, len(
