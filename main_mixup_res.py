@@ -5,7 +5,7 @@ import torch as t
 import torch.utils.data.dataloader as DataLoader
 import multiprocessing
 
-from model import dataloader_v2 as dataloader
+from model import dataloader
 from model import Resnet
 from model import VoxNet_try as VoxNet
 from model.func import save_model, eval_model_new_thread, eval_model
@@ -33,8 +33,8 @@ if __name__ == "__main__":
         test_data, batch_size=1, shuffle=False, 
         num_workers=config["num_workers"])
 
-    #model = Resnet.ResNet18().to(DEVICE)
-    model = VoxNet.MVVoxNet(2).to(DEVICE)
+    model = Resnet.ResNet18().to(DEVICE)
+    #model = VoxNet.MVVoxNet(2).to(DEVICE)
 
     #optimizer to use adam, SGD
     optimizer = t.optim.SGD(model.parameters(),lr=0.01, momentum=0.9)
@@ -69,9 +69,9 @@ if __name__ == "__main__":
 
             train_loss += loss
             pred = out.max(1, keepdim=True)[1]
-            correct += lam * pred.eq(label_a.view_as(pred)).sum().item() + (1-lam) * pred.eq(label_a.view_as(pred)).sum().item()
+            correct += lam * pred.eq(label_a.view_as(pred)).sum().item() + (1-lam) * pred.eq(label_b.view_as(pred)).sum().item()
         train_loss /= len(train_loader.dataset)
-        print('\nEpoch: {}, Train set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(epoch,
+        print('\nEpoch: {}, Train set: Average loss: {:.4f}, Accuracy: {:.2f}/{} ({:.0f}%)\n'.format(epoch,
                                                                                                  train_loss, correct, len(
                                                                                                      train_loader.dataset),
                                                                                                  100. * correct / len(train_loader.dataset)))
