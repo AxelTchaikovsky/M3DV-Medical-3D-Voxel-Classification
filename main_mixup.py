@@ -37,8 +37,8 @@ if __name__ == "__main__":
     model = VoxNet.MVVoxNet(2).to(DEVICE)
 
     #optimizer to use adam, SGD
-    optimizer = t.optim.SGD(model.parameters(),lr=0.01, momentum=0.9)
-    #optimizer = t.optim.Adam(model.parameters())
+    #optimizer = t.optim.SGD(model.parameters(),lr=0.01, momentum=0.9)
+    optimizer = t.optim.Adam(model.parameters())
 
     #criterion to use CrossEntropy
     criterion = t.nn.CrossEntropyLoss().to(DEVICE)

@@ -52,7 +52,7 @@ class MVVoxNet(torch.nn.Module):
         self.head = torch.nn.Sequential(OrderedDict([
             ('fc1', torch.nn.Linear(first_fc_in_features, 128)),
             ('relu1', torch.nn.ReLU()),
-            ('drop3', torch.nn.Dropout(p=0.4)),
+            ('drop3', torch.nn.Dropout(p=0.1)),
             ('fc2', torch.nn.Linear(128, num_classes))
         ]))
 

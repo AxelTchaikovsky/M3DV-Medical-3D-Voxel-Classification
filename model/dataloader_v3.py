@@ -129,7 +129,7 @@ class In_the_wild_set(t.utils.data.Dataset):
         data = np.load(os.path.join(self.test_root, self.test_names[index]))
         voxel = self.transform(data['voxel'].astype(np.float32))/255
         seg =  self.transform(data['seg'].astype(np.float32))
-        data = (voxel*seg).unsqueeze(0)
+        data = (voxel*seg)
         name = os.path.basename(self.test_names[index])
         name = os.path.splitext(name)[0]
         return data, name
