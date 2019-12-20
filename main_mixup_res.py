@@ -5,7 +5,7 @@ import torch as t
 import torch.utils.data.dataloader as DataLoader
 import multiprocessing
 
-from model import dataloader
+from model import dataloader_v3 as dataloader
 from model import Resnet
 from model import VoxNet_try as VoxNet
 from model.func import save_model, eval_model_new_thread, eval_model
@@ -33,15 +33,17 @@ if __name__ == "__main__":
         test_data, batch_size=1, shuffle=False, 
         num_workers=config["num_workers"])
 
-    model = Resnet.ResNet18().to(DEVICE)
+    #model = Resnet.ResNet18().to(DEVICE)
+    model = Resnet.resnet18().to(DEVICE)
     #model = VoxNet.MVVoxNet(2).to(DEVICE)
 
     #optimizer to use adam, SGD
-    optimizer = t.optim.SGD(model.parameters(),lr=0.01, momentum=0.9)
-    #optimizer = t.optim.Adam(model.parameters())
+    #optimizer = t.optim.SGD(model.parameters(),lr=0.01, momentum=0.9)
+    optimizer = t.optim.Adam(model.parameters())
 
     #criterion to use CrossEntropy
     criterion = t.nn.CrossEntropyLoss().to(DEVICE)
+    #criterion = t.nn.NLLLoss().to(DEVICE)
 
     #STARTING TRAIN AND TEST
     for epoch in range(EPOCH):
