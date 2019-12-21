@@ -9,7 +9,7 @@ import torch.nn.init as init
 import numpy as np
 import torch
 
-def mixup_data(x, y, alpha=1.0, use_cuda=True):
+def mixup_data(x, y, alpha=0.5, use_cuda=True):
 
     '''Compute the mixup data. Return mixed inputs, pairs of targets, and lambda'''
     if alpha > 0.:

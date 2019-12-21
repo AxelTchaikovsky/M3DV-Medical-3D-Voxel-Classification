@@ -39,7 +39,7 @@ class MVVoxNet(torch.nn.Module):
             ('conv2', torch.nn.Conv3d(in_channels=32, out_channels=32, kernel_size=3)),
             ('lkrelu2', torch.nn.LeakyReLU()),
             ('pool2', torch.nn.MaxPool3d(2)),
-            ('drop2', torch.nn.Dropout(p=0.2))#0.3
+            ('drop2', torch.nn.Dropout(p=0.3))#0.3
         ]))
 
         # Trick to accept different input shapes
@@ -52,7 +52,7 @@ class MVVoxNet(torch.nn.Module):
         self.head = torch.nn.Sequential(OrderedDict([
             ('fc1', torch.nn.Linear(first_fc_in_features, 128)),
             ('relu1', torch.nn.ReLU()),
-            ('drop3', torch.nn.Dropout(p=0.1)),
+            ('drop3', torch.nn.Dropout(p=0.4)),
             ('fc2', torch.nn.Linear(128, num_classes))
         ]))
 

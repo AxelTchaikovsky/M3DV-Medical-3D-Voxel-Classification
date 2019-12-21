@@ -80,7 +80,7 @@ class MyDataSet():
 
     def test_train_split(self, p=0.8):
         '''
-        p is the portation of the training set
+        p is the portion of the training set
         '''
         length = len(self.data_names)
 

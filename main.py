@@ -19,7 +19,7 @@ if __name__ == "__main__":
     EPOCH = config['epoch']
 
     DataSet = dataloader.MyDataSet()
-    train_data, test_data = DataSet.test_train_split()
+    train_data, test_data = DataSet.test_train_split(p=1)
 
     train_loader = DataLoader.DataLoader(
         train_data, batch_size=config["batch_size"], shuffle=True, 
@@ -66,22 +66,22 @@ if __name__ == "__main__":
         ##################################################
         #PYTORCH start evaluation mode
         ##################################################
-        model = model.eval()
-        test_loss = 0                                                                        
-        correct = 0
-        for batch_idx, [data, label] in enumerate(test_loader):
-            with t.no_grad():
-                data, label = data.to(DEVICE), label.to(DEVICE)
-                out = model(data)
-                loss = criterion(out, label)
-                test_loss += loss
-                pred = out.max(1, keepdim=True)[1]
-                correct += pred.eq(label.view_as(pred)).sum().item()
-        test_loss /= len(test_loader.dataset)
-        print('Epoch: {}, Test set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(epoch,
-                                                                                                 test_loss, correct, len(
-                                                                                                     test_loader.dataset),
-                                                                                                 100. * correct / len(test_loader.dataset)))
+        # model = model.eval()
+        # test_loss = 0                                                                        
+        # correct = 0
+        # for batch_idx, [data, label] in enumerate(test_loader):
+        #     with t.no_grad():
+        #         data, label = data.to(DEVICE), label.to(DEVICE)
+        #         out = model(data)
+        #         loss = criterion(out, label)
+        #         test_loss += loss
+        #         pred = out.max(1, keepdim=True)[1]
+        #         correct += pred.eq(label.view_as(pred)).sum().item()
+        # test_loss /= len(test_loader.dataset)
+        # print('Epoch: {}, Test set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(epoch,
+        #                                                                                          test_loss, correct, len(
+        #                                                                                              test_loader.dataset),
+        #                                                                                          100. * correct / len(test_loader.dataset)))
 
         save_model(model, epoch)
         eval_model_new_thread(epoch, 1)

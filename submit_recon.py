@@ -6,7 +6,7 @@ import torch.utils.data.dataloader as DataLoader
 import multiprocessing
 
 from model.dataloader_v2 import *
-from model import VoxNet_try as VoxNet
+from model import VoxNet
 from model.func import save_model, eval_model_new_thread, eval_model, load_model
 import argparse
 #from tensorboardX import SummaryWriter
@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
     model1 = VoxNet.MVVoxNet(2).to(DEVICE)
     # Test the train_loader
-    model1.load_state_dict(t.load("saved_model/77.pkl"))
+    model1.load_state_dict(t.load("D:/Machine learning/20-50_0.68240_31/34.pkl"))
               #t.load("saved_model/41.pkl"))
     model1.eval()
 
@@ -60,4 +60,4 @@ if __name__ == "__main__":
         path = 'result'
         if not os.path.exists(path):
             os.makedirs(path)
-        test_dict_df.to_csv('result/Submission_77_notest_adam_after.csv', index=False)
+        test_dict_df.to_csv('result/Submission_34_recon.csv', index=False)
