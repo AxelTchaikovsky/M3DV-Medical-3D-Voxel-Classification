@@ -38,7 +38,7 @@ class data_set(t.utils.data.Dataset):
         voxel = self.transform(data['voxel'].astype(np.float32))
         seg = data['seg'].astype(np.float32)
         label = self.label[index]
-        data = np.concatenate([voxel, seg])
+        data = voxel
         return data, label
 
     def __len__(self):

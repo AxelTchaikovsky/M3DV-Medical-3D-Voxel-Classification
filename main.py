@@ -8,6 +8,7 @@ import multiprocessing
 from model import dataloader_v2 as dataloader
 from model import Resnet
 from model import VoxNet_try as VoxNet
+from model import densenet
 from model.func import save_model, eval_model_new_thread, eval_model
 
 if __name__ == "__main__":
@@ -18,6 +19,8 @@ if __name__ == "__main__":
     LR = config['lr']
     EPOCH = config['epoch']
 
+    #preparing data
+    print('==> Preparing data..')
     DataSet = dataloader.MyDataSet()
     train_data, test_data = DataSet.test_train_split(p=0.8)
 
@@ -30,6 +33,7 @@ if __name__ == "__main__":
 
     #model = Resnet.ResNet18().to(DEVICE)
     model = VoxNet.MVVoxNet(2).to(DEVICE)
+    #model = densenet.DenseNet121().to(DEVICE)
 
     #optimizer to use adam, SGD
     #optimizer = t.optim.SGD(model.parameters(),lr=LR)

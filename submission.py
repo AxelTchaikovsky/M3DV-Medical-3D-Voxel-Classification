@@ -36,7 +36,7 @@ if __name__ == "__main__":
 
     model1 = VoxNet.MVVoxNet(2).to(DEVICE)
     # Test the train_loader
-    model1.load_state_dict(t.load("saved_model/77.pkl"))
+    model1.load_state_dict(t.load("saved_model/35.pkl"))
               #t.load("saved_model/41.pkl"))
     model1.eval()
 
@@ -60,4 +60,4 @@ if __name__ == "__main__":
         path = 'result'
         if not os.path.exists(path):
             os.makedirs(path)
-        test_dict_df.to_csv('result/Submission_77_notest_adam_after.csv', index=False)
+        test_dict_df.to_csv('result/Submission_35_0.8_vox.csv', index=False)
