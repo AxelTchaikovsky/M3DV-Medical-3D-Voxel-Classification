@@ -7,6 +7,7 @@ import multiprocessing
 
 from model.dataloader_v2 import *
 from model import VoxNet
+from model import VoxNet_try
 from model.func import save_model, eval_model_new_thread, eval_model, load_model
 import argparse
 #from tensorboardX import SummaryWriter
@@ -36,9 +37,15 @@ if __name__ == "__main__":
 
     model1 = VoxNet.MVVoxNet(2).to(DEVICE)
     # Test the train_loader
-    model1.load_state_dict(t.load("D:/Machine learning/20-50_0.68240_31/34.pkl"))
+    model1.load_state_dict(t.load("ready_to_run_model/31.pkl"))
               #t.load("saved_model/41.pkl"))
     model1.eval()
+
+    model2 = VoxNet_try.MVVoxNet(2).to(DEVICE)
+
+    model2.load_state_dict(t.load("ready_to_run_model/32.pkl"))
+              #t.load("saved_model/41.pkl"))
+    model2.eval()
 
     with t.no_grad():
         # Test the test_loader
@@ -50,7 +57,8 @@ if __name__ == "__main__":
         for batch_idx, [data, name] in enumerate(test_loader):
             data = data.to(DEVICE)
             out1 = t.nn.functional.softmax(model1(data))
-            out = out1
+            out2 = t.nn.functional.softmax(model2(data))
+            out = t.add(out1*0.45,out2*0.55)
             out = out.squeeze()
             Name.append(name[0])
             Score.append(out[1].item())
@@ -60,4 +68,4 @@ if __name__ == "__main__":
         path = 'result'
         if not os.path.exists(path):
             os.makedirs(path)
-        test_dict_df.to_csv('result/Submission_34_recon.csv', index=False)
+        test_dict_df.to_csv('result/recon.csv', index=False)
