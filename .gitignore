@@ -109,6 +109,8 @@ result/
 faces/
 saved_model/
 nohup.out
+ready_to_run_model/31.pkl
+ready_to_run_model/32.pkl
 
 #vscode file
 .vscode/
