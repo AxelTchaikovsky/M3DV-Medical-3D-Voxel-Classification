@@ -4,9 +4,9 @@
 
 This is a kaggle project about the classification of 3D Voxel of lung nodules. I have tried to solve to problem with several networks including: ResNet, VoxNet and DenseNet, as well as several techniques such as mixup etc..
 
-![IMG_0561](picofvoxel\IMG_0561.PNG)
+![IMG_0561](picofvoxel/IMG_0561.PNG)
 
-![IMG_0562](picofvoxel\IMG_0562.PNG)
+![IMG_0562](picofvoxel/IMG_0562.PNG)
 
 
 
