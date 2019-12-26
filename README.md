@@ -1,4 +1,4 @@
-# SJTU M3DV: Medical 3D Voxel Classification
+# **SJTU M3DV: Medical 3D Voxel Classification**
 
 ## EE369 Machine Learning 2019 Autumn Class Competition
 
